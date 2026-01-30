@@ -3,10 +3,7 @@ package io.teknek.deliverance.model;
 import com.codahale.metrics.MetricRegistry;
 import io.teknek.deliverance.DType;
 import io.teknek.deliverance.embedding.PoolingType;
-import io.teknek.deliverance.math.VectorMath;
 import io.teknek.deliverance.math.VectorMathUtils;
-import io.teknek.deliverance.model.AbstractModel;
-import io.teknek.deliverance.model.ModelSupport;
 import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
 import io.teknek.deliverance.tensor.KvBufferCacheSettings;
 import io.teknek.deliverance.tensor.TensorCache;
@@ -25,29 +22,20 @@ public class TestModels {
     public void LeafModelRun() throws Exception {
         String modelOwner = "MongoDB";
         String modelName = "mdbr-leaf-ir";
-
-        // Download the LEAF model or use existing if already downloaded
         ModelFetcher fetch = new ModelFetcher(modelOwner, modelName);
         File localModelPath = fetch.maybeDownload();
-        logger.info("Using LEAF model from: {}", localModelPath);
 
-        // Load as embedding model
         MetricRegistry mr = new MetricRegistry();
         TensorCache tensorCache = new TensorCache(mr);
         ConfigurableTensorProvider provider = new ConfigurableTensorProvider(tensorCache);
         AbstractModel model = ModelSupport.loadEmbeddingModel(localModelPath, DType.F32, DType.F32, provider,
                 mr, tensorCache, new KvBufferCacheSettings(true));
-
-        // Verify model configuration - LEAF should have 384 dimensions
         Assertions.assertEquals(384, model.getConfig().embeddingLength, "LEAF model should have 384 embedding dimensions");
 
-        // Test embedding generation with AVG pooling (LEAF doesn't have a pooler layer)
         String query1 = "What is artificial intelligence?";
         float[] embedding1 = model.embed(query1, PoolingType.AVG);
         Assertions.assertEquals(384, embedding1.length, "Embedding should have 384 dimensions");
-        logger.info("Generated embedding for '{}' with AVG pooling, dimension: {}", query1, embedding1.length);
 
-        // Verify embedding values are finite and not all zeros
         boolean hasNonZero = false;
         boolean allFinite = true;
         for (float v : embedding1) {
@@ -59,9 +47,8 @@ public class TestModels {
 
         // Test similarity between related texts
         String query2 = "Define artificial intelligence";
-        String query3 = "What is the weather today?";
+        String query3 = "Which power ranger is the most popular?";
 
-        // LEAF model uses AVG pooling (no pooler layer)
         PoolingType poolingType = PoolingType.AVG;
         float[] embedding2 = model.embed(query2, poolingType);
         float[] embedding3 = model.embed(query3, poolingType);
@@ -113,12 +100,12 @@ public class TestModels {
         );
 
         // Performance test
-        long start = System.currentTimeMillis();
-        int iterations = 100;
-        VectorMath.pfor(0, iterations, i -> model.embed(query1, poolingType));
-        long elapsed = System.currentTimeMillis() - start;
-        double avgTime = (double) elapsed / iterations;
-        logger.info("Performance: {} embeddings in {}ms, avg {}ms per embedding", iterations, elapsed, String.format("%.2f", avgTime));
+        //long start = System.currentTimeMillis();
+        //int iterations = 100;
+        //VectorMath.pfor(0, iterations, i -> model.embed(query1, poolingType));
+        //long elapsed = System.currentTimeMillis() - start;
+        //double avgTime = (double) elapsed / iterations;
+        //logger.info("Performance: {} embeddings in {}ms, avg {}ms per embedding", iterations, elapsed, String.format("%.2f", avgTime));
 
         model.close();
     }
