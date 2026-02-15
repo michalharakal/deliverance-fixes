@@ -6,6 +6,7 @@ import com.google.common.primitives.Ints;
 import io.teknek.deliverance.DType;
 import io.teknek.deliverance.generator.*;
 import io.teknek.deliverance.model.AbstractModel;
+import io.teknek.deliverance.model.TokenRenderer;
 import io.teknek.deliverance.safetensors.Config;
 import io.teknek.deliverance.safetensors.WeightLoader;
 import io.teknek.deliverance.tensor.AbstractTensor;
@@ -25,9 +26,9 @@ public class LlamaModel extends AbstractModel {
     public LlamaModel(InferenceType inferenceType, Config c, WeightLoader w, Tokenizer t, DType workingMemoryDType,
                       DType workingMemoryQType, Optional<DType> modelQType,
                       ConfigurableTensorProvider configurableTensorProvider, MetricRegistry metricRegistry,
-                      TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings) {
+                      TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings, TokenRenderer tokenRenderer) {
         super(inferenceType, c, w, t, workingMemoryDType, workingMemoryQType, modelQType, configurableTensorProvider,
-                metricRegistry, tensorCache, kvBufferCacheSettings);
+                metricRegistry, tensorCache, kvBufferCacheSettings, tokenRenderer);
     }
 
     @Override

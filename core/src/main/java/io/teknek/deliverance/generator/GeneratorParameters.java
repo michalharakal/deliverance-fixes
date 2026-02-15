@@ -1,5 +1,6 @@
 package io.teknek.deliverance.generator;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -11,6 +12,9 @@ public class GeneratorParameters {
     public Optional<Integer> ntokens = Optional.of(256);
     public Optional<Integer> seed = Optional.of(42);
     public Optional<String> cacheSalt = Optional.of("sha1obetter");
+    public Optional<List<String>> stopWords = Optional.empty();
+    public Optional<Boolean> includeStopStrInOutput = Optional.empty();
+
     public GeneratorParameters withSeed(int seed){
         this.seed = Optional.of(seed);
         return this;
@@ -26,6 +30,16 @@ public class GeneratorParameters {
     }
     public GeneratorParameters withTemperature(float tmp){
         this.temperature = Optional.of(tmp);
+        return this;
+    }
+
+    public GeneratorParameters withStopWords(List<String> stopWords){
+        this.stopWords = Optional.of(stopWords);
+        return this;
+    }
+
+    public GeneratorParameters withIncludeStopStrInOutput(boolean include){
+        this.includeStopStrInOutput= Optional.of(include);
         return this;
     }
 }

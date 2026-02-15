@@ -29,7 +29,7 @@ public class DirectNoPromptTest {
         File f = fetch.maybeDownload();
         TensorCache tc = new TensorCache(new MetricRegistry())  ;
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(tc),
-                new MetricRegistry(), new TensorCache(new MetricRegistry()), new KvBufferCacheSettings(true))) {
+                new MetricRegistry(), new TensorCache(new MetricRegistry()), new KvBufferCacheSettings(true), fetch)) {
             String prompt = "What comes next in the sequence? 1, 2 ";
             PromptContext ctx = PromptContext.of(prompt);
             Response r = m.generate(UUID.randomUUID(), ctx, new GeneratorParameters().withSeed(43), (s, f1) -> {});

@@ -6,6 +6,7 @@ import io.teknek.deliverance.DType;
 import io.teknek.deliverance.model.bert.BertModelType;
 import io.teknek.deliverance.model.llama.LlamaModelType;
 import io.teknek.deliverance.safetensors.*;
+import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
 import io.teknek.deliverance.tensor.KvBufferCacheSettings;
 import io.teknek.deliverance.tensor.TensorCache;
 import io.teknek.deliverance.tensor.operations.ConfigurableTensorProvider;
@@ -64,7 +65,16 @@ public class ModelSupport {
     public static AbstractModel loadModel(File model, DType workingMemoryType, DType workingQuantizationType,
                                           ConfigurableTensorProvider configurableTensorProvider,
                                           MetricRegistry metricRegistry, TensorCache tensorCache,
-                                          KvBufferCacheSettings kvBufferCacheSettings){
+                                          KvBufferCacheSettings kvBufferCacheSettings,
+                                          ModelFetcher fetcher){
+        //not all llama models use same tokenizer. detecting from config.json might be an option
+        TokenRenderer tr;
+        if (fetcher.getName().startsWith("Llama-3.1-8B-Instruct")
+                || fetcher.getName().startsWith("Llama-3.2-3B-Instruct")){
+            tr = new TokenizerRenderer();
+        } else {
+            tr = new NoOpTokenizerRenderer();
+        }
         File configFile = new File(model, "config.json");
         if (!configFile.exists()){
             throw new RuntimeException("Expecting to find config file " + configFile);
@@ -78,11 +88,11 @@ public class ModelSupport {
             Constructor<? extends AbstractModel> cons = modelType.getModelClass().getConstructor(AbstractModel.InferenceType.class, Config.class,
                     WeightLoader.class, Tokenizer.class, DType.class, DType.class, Optional.class,
                     ConfigurableTensorProvider.class, MetricRegistry.class, TensorCache.class,
-                    KvBufferCacheSettings.class);
+                    KvBufferCacheSettings.class, TokenRenderer.class);
 
             return cons.newInstance(AbstractModel.InferenceType.FULL_GENERATION, config, wl, tokenizer,
                     workingMemoryType, workingQuantizationType, Optional.empty(), configurableTensorProvider,
-                    metricRegistry, tensorCache, kvBufferCacheSettings);
+                    metricRegistry, tensorCache, kvBufferCacheSettings, tr);
         } catch (IOException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -114,11 +124,11 @@ public class ModelSupport {
             Constructor<? extends AbstractModel> cons = modelType.getModelClass().getConstructor(AbstractModel.InferenceType.class, Config.class,
                     WeightLoader.class, Tokenizer.class, DType.class, DType.class, Optional.class,
                     ConfigurableTensorProvider.class, MetricRegistry.class, TensorCache.class,
-                    KvBufferCacheSettings.class);
+                    KvBufferCacheSettings.class, TokenRenderer.class);
 
             return cons.newInstance(infType, config, wl, tokenizer,
                     workingMemoryType, workingQuantizationType, Optional.empty(), configurableTensorProvider,
-                    metricRegistry, tensorCache, kvBufferCacheSettings);
+                    metricRegistry, tensorCache, kvBufferCacheSettings, new NoOpTokenizerRenderer());
         } catch (IOException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }

@@ -23,6 +23,7 @@ public class ModelFetcher {
     private final String owner;
     private final String name;
 
+
     public ModelFetcher(String owner, String name){
         this.owner = owner;
         this.name = name;
@@ -35,6 +36,14 @@ public class ModelFetcher {
                 throw new UncheckedIOException(e);
             }
         }
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public File maybeDownload(){

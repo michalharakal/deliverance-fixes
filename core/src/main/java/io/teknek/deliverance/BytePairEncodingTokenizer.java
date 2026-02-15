@@ -19,9 +19,6 @@ public abstract class BytePairEncodingTokenizer implements Tokenizer {
     protected final TokenizerModel tokenizerModel;
     protected final PromptSupport promptSupport;
 
-    //this buffer here looks strange
-    //protected final ByteBuffer decodeBuffer = ByteBuffer.allocate(4);
-
     public BytePairEncodingTokenizer(Path modelRoot){
         {
             // https://github.com/openai/gpt-2/blob/master/src/encoder.py#L19

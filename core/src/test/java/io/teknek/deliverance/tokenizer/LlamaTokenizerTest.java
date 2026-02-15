@@ -29,7 +29,7 @@ public class LlamaTokenizerTest {
         File f = fetch.maybeDownload();
         TensorCache tc = new TensorCache(new MetricRegistry());
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(tc),
-                new MetricRegistry(), tc, new KvBufferCacheSettings(true))) {
+                new MetricRegistry(), tc, new KvBufferCacheSettings(true), fetch)) {
             List<String> tokens = m.getTokenizer().tokenize("show me the money!");
             assertEquals(List.of("show me the money!"), tokens);
             long[] encode = m.getTokenizer().encode("show me!");
@@ -48,7 +48,7 @@ public class LlamaTokenizerTest {
         File f = fetch.maybeDownload();
         TensorCache tc = new TensorCache(new MetricRegistry())  ;
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(tc),
-                new MetricRegistry(), tc, new KvBufferCacheSettings(true))) {
+                new MetricRegistry(), tc, new KvBufferCacheSettings(true), fetch)) {
             if (m.getTokenizer() instanceof LlamaTokenizer t){
                 System.out.println(t.getModel().merges.size());
 
@@ -69,7 +69,7 @@ public class LlamaTokenizerTest {
         File f = fetch.maybeDownload();
                TensorCache tc = new TensorCache(new MetricRegistry())  ;
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(tc),
-                new MetricRegistry(), tc, new KvBufferCacheSettings(true))) {
+                new MetricRegistry(), tc, new KvBufferCacheSettings(true), fetch)) {
             String p = "[INST] Tell me a joke. \uD83D\uDC31 [/INST] Answer ";
             if (m.getTokenizer() instanceof LlamaTokenizer tokenizer) {
                 long[] actual = tokenizer.encode(p);

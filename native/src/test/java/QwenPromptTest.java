@@ -36,7 +36,7 @@ public class QwenPromptTest {
         NativeSimdTensorOperations operation = new NativeSimdTensorOperations(new ConfigurableTensorProvider(tensorCache).get());
         ModelSupport.addModel("QWEN2", new Qwen2ModelType());
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(operation),
-                new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true))) {
+                new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true), fetch)) {
             String prompt = "What is the capital of New York, USA?";
             PromptSupport.Builder g = m.promptSupport().get().builder()
                     .addSystemMessage("You provide short answers to questions.")
@@ -64,7 +64,7 @@ public class QwenPromptTest {
         NativeSimdTensorOperations operation = new NativeSimdTensorOperations(new ConfigurableTensorProvider(tensorCache).get());
         ModelSupport.addModel("QWEN2", new Qwen2ModelType());
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(operation),
-                new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true))) {
+                new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true), fetch)) {
             /**
              *     >>> tokenizer("Hello world")["input_ids"]
              *     [9707, 1879]

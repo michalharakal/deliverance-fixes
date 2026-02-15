@@ -7,6 +7,7 @@ import io.teknek.deliverance.DType;
 import io.teknek.deliverance.embedding.PoolingLayer;
 import io.teknek.deliverance.generator.*;
 import io.teknek.deliverance.model.AbstractModel;
+import io.teknek.deliverance.model.TokenRenderer;
 import io.teknek.deliverance.safetensors.Config;
 import io.teknek.deliverance.safetensors.WeightLoader;
 import io.teknek.deliverance.tensor.AbstractTensor;
@@ -25,10 +26,10 @@ public class BertModel extends AbstractModel {
 
     public BertModel(InferenceType inferenceType, Config c, WeightLoader w, Tokenizer tokenizer, DType workingDType, DType workingQType,
                      Optional<DType> modelQType, ConfigurableTensorProvider configurableTensorProvider,
-                     MetricRegistry metricRegistry, TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings) {
+                     MetricRegistry metricRegistry, TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings, TokenRenderer tokenRenderer) {
         //note: jLAMA uses FOrward_passs
         super(inferenceType, c, w, tokenizer, workingDType, workingQType, modelQType,
-                configurableTensorProvider, metricRegistry, tensorCache, kvBufferCacheSettings);
+                configurableTensorProvider, metricRegistry, tensorCache, kvBufferCacheSettings, tokenRenderer);
     }
 
     protected AbstractTensor loadWeight(String name) {

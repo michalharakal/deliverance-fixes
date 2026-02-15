@@ -72,7 +72,7 @@ class MultiModelConfiguration {
             return model;
         } else if ("GENERATION".equalsIgnoreCase(config.getInferenceType())){
             AbstractModel model = ModelSupport.loadModel(f, DType.F32, DType.I8, provider,
-                    metricRegistry, tensorCache, new KvBufferCacheSettings(true));
+                    metricRegistry, tensorCache, new KvBufferCacheSettings(true), fetch);
             return model;
         } else {
             throw new IllegalArgumentException("Wrong type: " + config.getInferenceType());

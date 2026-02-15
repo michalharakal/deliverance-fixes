@@ -13,7 +13,7 @@ public class LlamaTokenizerTest {
 
     @Test
     void decodeAsciiChar(){
-        assertEquals( 100L, tokenizer.encodeCharacterAsToken((byte) Character.valueOf('a').charValue()));
+        assertEquals(100L, tokenizer.encodeCharacterAsToken((byte) Character.valueOf('a').charValue()));
         assertEquals(Optional.of('a'), tokenizer.maybeDecodeTokenAsCharacter(100));
     }
 

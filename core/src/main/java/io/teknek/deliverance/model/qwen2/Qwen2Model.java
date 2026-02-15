@@ -22,6 +22,7 @@ import io.teknek.deliverance.generator.CausalSelfAttention;
 import io.teknek.deliverance.generator.MLPBlock;
 import io.teknek.deliverance.generator.RmsNorm;
 import io.teknek.deliverance.generator.TransformerBlock;
+import io.teknek.deliverance.model.TokenRenderer;
 import io.teknek.deliverance.model.llama.LlamaModel;
 import io.teknek.deliverance.safetensors.Config;
 import io.teknek.deliverance.safetensors.WeightLoader;
@@ -45,10 +46,10 @@ public class Qwen2Model extends LlamaModel {
             InferenceType inferenceType, Config c, WeightLoader w, Tokenizer t, DType workingMemoryDType,
             DType workingMemoryQType, Optional<DType> modelQType,
             ConfigurableTensorProvider configurableTensorProvider, MetricRegistry metricRegistry,
-            TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings
+            TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings, TokenRenderer tokenRenderer
     ) {
         super(inferenceType, c, w, t, workingMemoryDType, workingMemoryQType, modelQType, configurableTensorProvider, metricRegistry,
-                tensorCache, kvBufferCacheSettings);
+                tensorCache, kvBufferCacheSettings, tokenRenderer);
 
     }
 

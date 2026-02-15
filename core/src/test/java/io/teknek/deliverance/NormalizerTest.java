@@ -1,7 +1,5 @@
 package io.teknek.deliverance;
 
-
-
 import io.teknek.deliverance.tokenizer.Normalizer;
 import io.teknek.deliverance.tokenizer.NormalizerItem;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +14,6 @@ public class NormalizerTest {
         Normalizer normal = new Normalizer("", Collections.emptyList());
         Assertions.assertEquals("This is co◌̈l", normal.normalize("This is co◌̈l"));
     }
-
 
     @Test
     void withAnItem(){

@@ -22,8 +22,8 @@ public interface Tokenizer {
      */
     Optional<PromptSupport> promptSupport();
 
-    /** quen returs like ĠThe where G is space as the model is trained this way. Other things like 0 or . lack
-     * the space. clean up to retun to user*/
+
+    @Deprecated
     String tokenForResponse(String token);
 
 }

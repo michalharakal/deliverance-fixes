@@ -11,12 +11,6 @@ public class Qwen2Tokenizer extends LlamaTokenizer {
 
     @Override
     public String tokenForResponse(String decoded) {
-        if (decoded.length() <= 1){
-            return decoded;
-        }
-        if(decoded.startsWith("Ġ")){
-            return " " + decoded.substring(1);
-        }
         return decoded;
     }
 

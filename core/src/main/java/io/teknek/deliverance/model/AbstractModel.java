@@ -82,10 +82,13 @@ public abstract class AbstractModel implements Generator {
     //embedding
     protected Optional<PoolingLayer> poolingLayer;
 
+    protected final TokenRenderer tokenRenderer;
+
 
     protected AbstractModel(InferenceType inferenceType, Config c, WeightLoader w, Tokenizer t, DType workingMemoryDType,
                             DType workingMemoryQType, Optional<DType> modelQType, ConfigurableTensorProvider provider,
-                            MetricRegistry metricRegistry, TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings) {
+                            MetricRegistry metricRegistry, TensorCache tensorCache, KvBufferCacheSettings kvBufferCacheSettings,
+                            TokenRenderer tokenRenderer) {
         this.inferenceType = inferenceType;
         this.config = c;
         this.weights = w;
@@ -98,6 +101,7 @@ public abstract class AbstractModel implements Generator {
         this.configurableTensorProvider = provider;
         this.metricRegistry = metricRegistry;
         this.tensorCache = tensorCache;
+        this.tokenRenderer = tokenRenderer;
 
         if (workingMemoryQType == null) {
             workingMemoryQType = configurableTensorProvider.get().preferredWorkingQuantizedType();
@@ -199,8 +203,8 @@ public abstract class AbstractModel implements Generator {
     }
 
     public Response generate(UUID sessionId, PromptContext promptContext, GeneratorParameters generatorParameters,
-                      BiConsumer<String, Float> onTokenWithTimings) {
-        Random random = generatorParameters.seed.isEmpty() ? new Random(): new Random(generatorParameters.seed.get());
+                             BiConsumer<String, Float> onTokenWithTimings) {
+        Random random = generatorParameters.seed.map(Random::new).orElseGet(Random::new);
         long[] encoded = tokenizer.encode(promptContext.getPrompt());
         if (encoded.length > 0 && encoded[0] == config.bosToken) {
             encoded = Arrays.copyOfRange(encoded, 1, encoded.length);
@@ -245,7 +249,7 @@ public abstract class AbstractModel implements Generator {
                 tokensGenerated = 0;
                 last.close();
                 String decoded = tokenizer.decode(next);
-                String cleaned = tokenizer.tokenForResponse(decoded);
+                String cleaned = tokenRenderer.tokenizerToRendered(decoded);
                 if (tokenizer.getModel().isSpecialToken(next)) {
                     responseTextWithSpecialTokens.append(cleaned);
                 } else {
@@ -269,7 +273,8 @@ public abstract class AbstractModel implements Generator {
                     }
                     String decoded1 = tokenizer.decode(next);
                     CausualWhisperer.LOGGER.debug("decoded for response {}", decoded1);
-                    String cleaned2 = tokenizer.tokenForResponse(decoded1);
+
+                    String cleaned2 = tokenRenderer.tokenizerToRendered(decoded1);
                     if (tokenizer.getModel().isSpecialToken(next)) {
                         responseTextWithSpecialTokens.append(cleaned2);
                     } else {
@@ -277,6 +282,28 @@ public abstract class AbstractModel implements Generator {
                         onTokenWithTimings.accept(cleaned2, genMsPerToken);
                         responseTextWithSpecialTokens.append(cleaned2);
                         responseText.append(cleaned2);
+                    }
+
+                    if (generatorParameters.stopWords.isPresent()){
+                        List<String> stops = generatorParameters.stopWords.get();
+                        for (String stop: stops){
+                            if (responseTextWithSpecialTokens.indexOf(stop) != -1) {
+                                reason = FinishReason.STOP_TOKEN;
+                                if (generatorParameters.includeStopStrInOutput.isPresent() && generatorParameters.includeStopStrInOutput.get()){
+                                    long end = System.currentTimeMillis();
+                                    return new Response(responseText.toString(), responseTextWithSpecialTokens.toString(),
+                                        reason, promptLength, tokensGenerated, promptBatchTime, end - start);
+                                } else {
+                                    long end = System.currentTimeMillis();
+                                    int index = responseTextWithSpecialTokens.indexOf(stop);
+                                    responseTextWithSpecialTokens.delete(index, responseTextWithSpecialTokens.length());
+                                    int x = responseText.indexOf(stop);
+                                    responseText.delete(x, responseText.length());
+                                    return new Response(responseText.toString(), responseTextWithSpecialTokens.toString(),
+                                            reason, promptLength, tokensGenerated, promptBatchTime, end - start);
+                                }
+                            }
+                        }
                     }
                 }
 

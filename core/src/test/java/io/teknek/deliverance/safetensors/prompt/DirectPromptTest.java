@@ -30,7 +30,7 @@ public class DirectPromptTest {
         MetricRegistry mr = new MetricRegistry();
         TensorCache tensorCache = new TensorCache(mr);
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(tensorCache),
-                new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true))) {
+                new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true), fetch)) {
             String prompt = "What is the best season to plant avocados?";
             PromptContext ctx;
             {

@@ -17,6 +17,7 @@
 
     <properties>
         <junit.version>5.11.4</junit.version>
+        <mockito.version>5.20.0</mockito.version>
         <owasp.version>12.1.0</owasp.version>
         <serenity.base.version>4.2.13</serenity.base.version>
         <osmaven.version>1.7.1</osmaven.version>
@@ -41,6 +42,7 @@
         <module>sketches</module>
         <module>web</module>
         <module>grace</module>
+        <module>vdd</module>
     </modules>
     <build>
         <extensions>
