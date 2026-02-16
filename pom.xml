@@ -42,7 +42,7 @@
         <module>sketches</module>
         <module>web</module>
         <module>grace</module>
-        <module>vdd</module>
+        <module>vibrant-maven-plugin</module>
     </modules>
     <build>
         <extensions>
@@ -214,8 +214,8 @@
         <url>http://github.com/edwardcapriolo/deliverance/tree/master</url>
         <connection>https://github.com/edwardcapriolo/deliverance.git</connection>
         <developerConnection>scm:git:git@github.com:edwardcapriolo/deliverance.git</developerConnection>
-    
     </scm>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -233,7 +233,9 @@
                 </property>
             </activation>
             <build>
+
                 <plugins>
+
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>

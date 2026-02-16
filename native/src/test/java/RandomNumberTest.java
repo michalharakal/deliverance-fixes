@@ -54,7 +54,6 @@ public class RandomNumberTest {
         MetricRegistry mr = new MetricRegistry();
         TensorCache tensorCache = new TensorCache(mr);
         NativeSimdTensorOperations operation = new NativeSimdTensorOperations(new ConfigurableTensorProvider(tensorCache).get());
-        ConfigurableTensorProvider withoutNative = new ConfigurableTensorProvider(tensorCache);
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(operation),
                 new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true), fetch)) {
             String prompt = "Generate a java interface named Shape with a method name calculateArea.";
