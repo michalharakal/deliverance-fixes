@@ -80,7 +80,20 @@
                     <vibeSpecs>
                         <vibeSpec>
                             <id>shape</id>
+                            <enabled>true</enabled>
+                            <userMessages>
+                                <userMessage>Hello</userMessage>
+                            </userMessages>
+                            <generateTo>generated-source</generateTo>
                         </vibeSpec>
+                        <vibeSpec>
+                            <id>shape</id>
+                            <enabled>false</enabled>
+                            <userMessages>
+                                <userMessage>Hello</userMessage>
+                            </userMessages>
+                        </vibeSpec>
+
                     </vibeSpecs>
                 </configuration>
             </plugin>

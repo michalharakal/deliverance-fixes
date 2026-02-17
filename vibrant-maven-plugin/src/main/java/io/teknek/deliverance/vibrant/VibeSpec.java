@@ -5,11 +5,19 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.util.List;
 
 public class VibeSpec {
+
     @Parameter(name = "id")
     String id;
 
-    @Parameter(name = "userMessages")
+    @Parameter(name = "userMessage")
     List<String> userMessages;
+
+    @Parameter(name = "enabled", defaultValue = "true")
+    boolean enabled;
+
+    @Parameter(name = "generateTo", defaultValue = "generated-source")
+    private String generateTo;
+
 
     public VibeSpec(){
 
@@ -33,11 +41,28 @@ public class VibeSpec {
         this.userMessages = userMessages;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getGenerateTo() {
+        return generateTo;
+    }
+
+    public void setGenerateTo(String generateTo) {
+        this.generateTo = generateTo;
+    }
+
     @Override
     public String toString() {
         return "VibeSpec{" +
                 "id='" + id + '\'' +
                 ", userMessages=" + userMessages +
+                ", enabled=" + enabled +
                 '}';
     }
 }
