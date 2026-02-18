@@ -1,17 +1,24 @@
 package io.teknek.deliverance.vibrant;
 
+import io.teknek.deliverance.DType;
 import org.apache.maven.plugins.annotations.Parameter;
 
 public class ModelConfig {
-    @Parameter(name="modelName" , defaultValue = "Llama-3.2-3B-Instruct-JQ4")
+    //@Parameter(name="modelName" , defaultValue = "Llama-3.2-3B-Instruct-JQ4")
     private String modelName;
 
-    @Parameter(name= "owner", defaultValue = "tjake")
+    //@Parameter(name= "owner", defaultValue = "tjake")
     private String owner;
+
+    private String workingMemType;
+
+    private String quantizedMemType;
 
     public ModelConfig(){
         setModelName("Llama-3.2-3B-Instruct-JQ4");
         setOwner("tjake");
+        setWorkingMemType(DType.F32.toString());
+        setQuantizedMemType(DType.I8.toString());
     }
 
     public String getModelName() {
@@ -36,5 +43,21 @@ public class ModelConfig {
                 "modelName='" + modelName + '\'' +
                 ", owner='" + owner + '\'' +
                 '}';
+    }
+
+    public String getWorkingMemType() {
+        return workingMemType;
+    }
+
+    public void setWorkingMemType(String workingMemType) {
+        this.workingMemType = workingMemType;
+    }
+
+    public String getQuantizedMemType() {
+        return quantizedMemType;
+    }
+
+    public void setQuantizedMemType(String quantizedMemType) {
+        this.quantizedMemType = quantizedMemType;
     }
 }

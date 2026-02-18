@@ -12,6 +12,9 @@ public class VibeSpec {
     @Parameter(name = "userMessage")
     List<String> userMessages;
 
+    @Parameter(name = "systemMessage")
+    List<String> systemMessages;
+
     @Parameter(name = "enabled", defaultValue = "true")
     boolean enabled;
 
@@ -57,12 +60,22 @@ public class VibeSpec {
         this.generateTo = generateTo;
     }
 
+    public List<String> getSystemMessages() {
+        return systemMessages;
+    }
+
+    public void setSystemMessages(List<String> systemMessages) {
+        this.systemMessages = systemMessages;
+    }
+
     @Override
     public String toString() {
         return "VibeSpec{" +
                 "id='" + id + '\'' +
                 ", userMessages=" + userMessages +
+                ", systemMessages=" + systemMessages +
                 ", enabled=" + enabled +
+                ", generateTo='" + generateTo + '\'' +
                 '}';
     }
 }

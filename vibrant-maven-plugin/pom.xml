@@ -81,8 +81,14 @@
                         <vibeSpec>
                             <id>shape</id>
                             <enabled>true</enabled>
+                            <systemMessages>
+                                <systemMessage>You are an assistant that produces concise, production-grade software.</systemMessage>
+                                <systemMessage>Output java code.</systemMessage>
+                                <systemMessage>Generate java code into the package 'io.teknek.shape' .</systemMessage>
+                            </systemMessages>
                             <userMessages>
-                                <userMessage>Hello</userMessage>
+                                <userMessage>Generate a java interface named Shape with a method named area that returns a double.</userMessage>
+                                <userMessage>Generate a java class named Circle that extends the Shape interface.</userMessage>
                             </userMessages>
                             <generateTo>generated-source</generateTo>
                         </vibeSpec>
@@ -93,7 +99,6 @@
                                 <userMessage>Hello</userMessage>
                             </userMessages>
                         </vibeSpec>
-
                     </vibeSpecs>
                 </configuration>
             </plugin>
