@@ -38,12 +38,12 @@ public class JavaResponseTransformer implements MessageTransformer {
 
         String currentFile = null;
         StringBuilder file = new StringBuilder();
-        if (currentPackage != null){
-            file.append("package " + currentPackage + "\n");
-        }
-        for (String inport: imports){
-            file.append(inport + "\n");
-        }
+        //if (currentPackage != null){
+        //    file.append("package " + currentPackage + "\n");
+        //}
+        //for (String inport: imports){
+        //    file.append(inport + "\n");
+        //}
         //2nd pass
         br = new BufferedReader(new StringReader(trimMd));
         try {
@@ -59,8 +59,8 @@ public class JavaResponseTransformer implements MessageTransformer {
                     if (currentPackage != null){
                         file.append("package "+ currentPackage +";\n");
                     }
-                    for (String inport: imports){
-                        file.append(inport + "\n");
+                    for (String impor: imports){
+                        file.append(impor + "\n");
                     }
                 }
                 if (line.contains("public interface")){

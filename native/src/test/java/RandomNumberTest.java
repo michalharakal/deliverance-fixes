@@ -122,7 +122,7 @@ return 3;
                 """, processResponse(in));
     }
 
-    public String processResponse(String input){
+    public static String processResponse(String input){
         String s = "```java";
         int indexOfStart = input.indexOf(s);
         if (indexOfStart == -1){

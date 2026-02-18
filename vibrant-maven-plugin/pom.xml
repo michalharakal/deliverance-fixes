@@ -90,7 +90,7 @@
                             </systemMessages>
                             <userMessages>
                                 <userMessage>Generate a java interface named Shape with a method named area that returns a double.</userMessage>
-                                <userMessage>Generate a java class named Circle that extends the Shape interface.</userMessage>
+                                <userMessage>Generate a java class named Circle that implements the Shape interface.</userMessage>
                             </userMessages>
                             <generateTo>generated-source</generateTo>
                         </vibeSpec>
