@@ -21,6 +21,9 @@ public class VibeSpec {
     @Parameter(name = "generateTo", defaultValue = "generated-source")
     private String generateTo;
 
+    @Parameter(name ="overwrite", defaultValue = "false")
+    private boolean overwrite;
+
 
     public VibeSpec(){
 
@@ -66,6 +69,14 @@ public class VibeSpec {
 
     public void setSystemMessages(List<String> systemMessages) {
         this.systemMessages = systemMessages;
+    }
+
+    public boolean isOverwrite() {
+        return overwrite;
+    }
+
+    public void setOverwrite(boolean overwrite) {
+        this.overwrite = overwrite;
     }
 
     @Override

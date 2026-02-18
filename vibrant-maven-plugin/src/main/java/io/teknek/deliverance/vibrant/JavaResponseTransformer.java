@@ -4,6 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
 //we assume one package lots of impots and multiple classes /interfaces
 // in one reply.
 public class JavaResponseTransformer implements MessageTransformer {
-    public void transform(String raw, Path base){
+    public void transform(String raw, Path base, VibeSpec vibeSpec){
         String currentPackage = null;
         String trimMd = processResponse(raw);
         BufferedReader br = new BufferedReader(new StringReader(trimMd));
@@ -38,7 +39,7 @@ public class JavaResponseTransformer implements MessageTransformer {
         String currentFile = null;
         StringBuilder file = new StringBuilder();
         if (currentPackage != null){
-            file.append("package "+ currentPackage +"\n");
+            file.append("package " + currentPackage + "\n");
         }
         for (String inport: imports){
             file.append(inport + "\n");
@@ -76,7 +77,11 @@ public class JavaResponseTransformer implements MessageTransformer {
                     if (currentFile != null) {
                         Path p = base.resolve(currentFile + ".java");
                         System.out.println("writing to path "+ p);
-                        Files.write(p, file.toString().getBytes(StandardCharsets.UTF_8));
+                        if (vibeSpec.isOverwrite()) {
+                            Files.write(p, file.toString().getBytes(StandardCharsets.UTF_8));
+                        } else {
+                            Files.write(p, file.toString().getBytes(StandardCharsets.UTF_8),  StandardOpenOption.CREATE_NEW);
+                        }
                         file = new StringBuilder();
                     }
                 }
