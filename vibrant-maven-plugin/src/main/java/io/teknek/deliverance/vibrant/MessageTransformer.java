@@ -2,6 +2,6 @@ package io.teknek.deliverance.vibrant;
 
 import java.nio.file.Path;
 
-interface MessageTransformer {
+public interface MessageTransformer {
     void transform(String raw, Path base, VibeSpec vibeSpec);
 }

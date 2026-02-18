@@ -10,7 +10,7 @@ import java.util.List;
 
 
 //this is hacky without structured output
-//we assume one package lots of impots and multiple classes /interfaces
+//we assume one package lots of imports and multiple classes /interfaces
 // in one reply.
 public class JavaResponseTransformer implements MessageTransformer {
     public void transform(String raw, Path base, VibeSpec vibeSpec){

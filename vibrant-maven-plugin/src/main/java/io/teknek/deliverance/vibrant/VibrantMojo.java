@@ -91,7 +91,15 @@ public class VibrantMojo extends AbstractMojo {
         getLog().debug("inference engine reply: " + k.responseText);
         Path p = Path.of(specDir.toURI());
         Path child = p.resolve("raw.txt");
-        JavaResponseTransformer t = new JavaResponseTransformer();
+        MessageTransformer t;
+        try {
+            if (spec.getMessageTransformer() == null){
+                spec.setMessageTransformer("io.teknek.deliverance.vibrant.JavaResponseTransformer");
+            }
+            t = (MessageTransformer) Class.forName(spec.getMessageTransformer()).newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new MojoExecutionException(e);
+        }
         t.transform(k.responseText, p, spec);
         try {
             if (spec.isOverwrite()){

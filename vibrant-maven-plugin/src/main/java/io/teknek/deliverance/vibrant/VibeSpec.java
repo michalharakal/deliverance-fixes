@@ -24,6 +24,8 @@ public class VibeSpec {
     @Parameter(name ="overwrite", defaultValue = "false")
     private boolean overwrite;
 
+    @Parameter(name = "messageTransformer", defaultValue = "io.teknek.deliverance.vibrant.JavaResponseTransformer")
+    private String messageTransformer;
 
     public VibeSpec(){
 
@@ -77,6 +79,14 @@ public class VibeSpec {
 
     public void setOverwrite(boolean overwrite) {
         this.overwrite = overwrite;
+    }
+
+    public String getMessageTransformer() {
+        return messageTransformer;
+    }
+
+    public void setMessageTransformer(String messageTransformer) {
+        this.messageTransformer = messageTransformer;
     }
 
     @Override
