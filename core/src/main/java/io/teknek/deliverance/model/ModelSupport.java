@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.teknek.deliverance.DType;
 import io.teknek.deliverance.model.bert.BertModelType;
 import io.teknek.deliverance.model.llama.LlamaModelType;
+import io.teknek.deliverance.model.qwen2.Qwen2ModelType;
+import io.teknek.deliverance.model.qwen2.Qwen2TokenizerRenderer;
 import io.teknek.deliverance.safetensors.*;
 import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
 import io.teknek.deliverance.tensor.KvBufferCacheSettings;
@@ -34,6 +36,7 @@ public class ModelSupport {
     static {
         registry.putIfAbsent("BERT", new BertModelType());
         registry.putIfAbsent("LLAMA", new LlamaModelType());
+        registry.putIfAbsent("QWEN2", new Qwen2ModelType());
     }
 
     public static void addModel(String modelName, ModelType t){
@@ -72,6 +75,8 @@ public class ModelSupport {
         if (fetcher.getName().startsWith("Llama-3.1-8B-Instruct")
                 || fetcher.getName().startsWith("Llama-3.2-3B-Instruct")){
             tr = new TokenizerRenderer();
+        } else if (fetcher.getName().startsWith("Qwen2.5-0.5B-Instruct")) {
+          tr = new Qwen2TokenizerRenderer();
         } else {
             tr = new NoOpTokenizerRenderer();
         }

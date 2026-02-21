@@ -49,7 +49,6 @@ public class QwenPromptTest {
             var uuid = UUID.randomUUID();
 
             Response k = m.generate(uuid, g.build(), new GeneratorParameters().withTemperature(0.0f),(s1, f1) -> {});
-            System.out.println(k);
             assertTrue(k.responseText.contains("New York City"));
 
         }
