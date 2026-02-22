@@ -190,7 +190,7 @@ public class KvBufferCache implements Closeable {
 
         private final KvPageContext pageContext;
 
-        KvBuffer(String session, int maxPageSizeInBytes) {
+            KvBuffer(String session, int maxPageSizeInBytes) {
             this.session = session;
             this.pageContext = computePageSize(maxPageSizeInBytes);
             this.pages = new KvBufferPage[pageContext.numberOfLayerPages][pageContext.numberOfContextPages];

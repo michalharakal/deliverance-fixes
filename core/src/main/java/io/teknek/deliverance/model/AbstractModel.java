@@ -211,10 +211,10 @@ public abstract class AbstractModel implements Generator {
         }
         int ntokens = generatorParameters.ntokens.orElse(256);
         float temperature = generatorParameters.temperature.orElse(0.0f);
-        String cacheSalt = generatorParameters.cacheSalt.orElse("sha1here");
+        //String cacheSalt = generatorParameters.cacheSalt.orElse("sha1here");
         Preconditions.checkArgument(encoded.length < config.contextLength
                 && encoded.length < ntokens, "Prompt exceeds max tokens");
-        try (KvBufferCache.KvBuffer kvmem = kvBufferCache.getKvBuffer(cacheSalt)) { // k and v for context window
+        try (KvBufferCache.KvBuffer kvmem = kvBufferCache.getKvBuffer(sessionId.toString())) { // k and v for context window
             int startPos = kvmem.getCurrentContextPosition(); // Number of tokens in the buffer
             if (ntokens > config.contextLength) {
                 ntokens = config.contextLength;
@@ -241,7 +241,7 @@ public abstract class AbstractModel implements Generator {
                 promptLength = encoded.length;
                 long start = System.currentTimeMillis();
                 AbstractTensor last = batchForward(promptTokens, startPos, kvmem);
-                logger.warn("After batch forward size: {} shape: {}" , last.size(), last.shape());
+                logger.debug("After batch forward size: {} shape: {}" , last.size(), last.shape());
                 promptBatchTime = System.currentTimeMillis() - start;
                 float batchMsPerToken = Math.round((((double) promptBatchTime) / (double) promptLength));
                 int next = sample(last.slice(last.shape().first() - 1), temperature, random.nextFloat(), logits);
@@ -316,7 +316,7 @@ public abstract class AbstractModel implements Generator {
     }
 
     public float[] embed(String input, PoolingType poolingType) {
-        CausualWhisperer.LOGGER.info("embedding on {} using pooling type {}", input, poolingType);
+        CausualWhisperer.LOGGER.debug("embedding on {} using pooling type {}", input, poolingType);
         int[] encoded = Arrays.stream(tokenizer.encode(input)).mapToInt(Ints::checkedCast).toArray();
         Preconditions.checkArgument(encoded.length < config.contextLength);
         float [] outputEmbedding = new float[config.embeddingLength];
@@ -493,5 +493,9 @@ public abstract class AbstractModel implements Generator {
 
     protected PoolingLayer loadPoolingWeights() {
         return null;
+    }
+
+    public TokenRenderer getTokenRenderer(){
+        return this.tokenRenderer;
     }
 }

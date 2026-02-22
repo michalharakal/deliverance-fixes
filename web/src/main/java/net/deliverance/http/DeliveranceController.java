@@ -76,7 +76,7 @@ public class DeliveranceController {
         if (result != null){
             return result;
         }
-        GeneratorParameters params = new GeneratorParameters().withTemperature(0.1f).withSalt(sessionId.toString());
+        GeneratorParameters params = new GeneratorParameters().withTemperature(0.1f);
         AtomicInteger index = new AtomicInteger(0);
         builder.addSystemMessage("generate correct answers");
         LOGGER.info("submitted prompt {}", builder.build());

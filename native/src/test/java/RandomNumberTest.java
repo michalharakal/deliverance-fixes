@@ -54,6 +54,7 @@ public class RandomNumberTest {
         MetricRegistry mr = new MetricRegistry();
         TensorCache tensorCache = new TensorCache(mr);
         NativeSimdTensorOperations operation = new NativeSimdTensorOperations(new ConfigurableTensorProvider(tensorCache).get());
+        var uuid = UUID.randomUUID();
         try (AbstractModel m = ModelSupport.loadModel(f, DType.F32, DType.I8, new ConfigurableTensorProvider(operation),
                 new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true), fetch)) {
             String prompt = "Generate a java interface named Shape with a method name calculateArea.";
@@ -68,7 +69,7 @@ public class RandomNumberTest {
                     .addUserMessage("Generate a java class named Circle that extends the Shape interface.")
                     .build();
 
-            var uuid = UUID.randomUUID();
+
             Response k = m.generate(uuid, ctx, new GeneratorParameters()
                     .withNtokens(512)
                             .withIncludeStopStrInOutput(false)
