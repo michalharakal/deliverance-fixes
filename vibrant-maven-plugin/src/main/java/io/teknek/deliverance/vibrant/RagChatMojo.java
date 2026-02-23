@@ -27,7 +27,6 @@ import io.teknek.deliverance.tensor.operations.ConfigurableTensorProvider;
 import io.teknek.deliverance.tensor.operations.NativeSimdTensorOperations;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -147,11 +146,11 @@ public class RagChatMojo  extends AbstractMojo {
                         b.addUserMessage(prompt);
                         var uuid = UUID.randomUUID();
                         io.teknek.deliverance.generator.Response k = model.generate(uuid, b.build(), new GeneratorParameters()
-                                .withNtokens(512)
+                                .withNtokens(2048)
                                 .withIncludeStopStrInOutput(false)
                                 .withStopWords(List.of("<|eot_id|>"))
                                 .withTemperature(0.2f)
-                                .withSeed(99998), (s1, f1) -> {
+                                .withSeed(99998), (int next, String tok, String s1, float f1) -> {
                             System.out.print( model.getTokenRenderer().tokenizerToRendered(s1));
                         });
                         System.out.println(">> ");
@@ -165,7 +164,7 @@ public class RagChatMojo  extends AbstractMojo {
                             .withIncludeStopStrInOutput(false)
                             .withStopWords(List.of("<|eot_id|>"))
                             .withTemperature(0.2f)
-                            .withSeed(99998), (s1, f1) -> {
+                            .withSeed(99998), (int next, String tok, String s1, float f1) -> {
                         System.out.print( model.getTokenRenderer().tokenizerToRendered(s1));
                     });
                     System.out.println();

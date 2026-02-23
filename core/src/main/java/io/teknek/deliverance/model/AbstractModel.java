@@ -203,7 +203,7 @@ public abstract class AbstractModel implements Generator {
     }
 
     public Response generate(UUID sessionId, PromptContext promptContext, GeneratorParameters generatorParameters,
-                             BiConsumer<String, Float> onTokenWithTimings) {
+                             GenerateEvent onTokenWithTimings) {
         Random random = generatorParameters.seed.map(Random::new).orElseGet(Random::new);
         long[] encoded = tokenizer.encode(promptContext.getPrompt());
         if (encoded.length > 0 && encoded[0] == config.bosToken) {
@@ -211,7 +211,6 @@ public abstract class AbstractModel implements Generator {
         }
         int ntokens = generatorParameters.ntokens.orElse(256);
         float temperature = generatorParameters.temperature.orElse(0.0f);
-        //String cacheSalt = generatorParameters.cacheSalt.orElse("sha1here");
         Preconditions.checkArgument(encoded.length < config.contextLength
                 && encoded.length < ntokens, "Prompt exceeds max tokens");
         try (KvBufferCache.KvBuffer kvmem = kvBufferCache.getKvBuffer(sessionId.toString())) { // k and v for context window
@@ -237,7 +236,6 @@ public abstract class AbstractModel implements Generator {
                 } else {
                     promptTokens = Arrays.stream(encoded).mapToInt(Ints::checkedCast).toArray();
                 }
-                logger.warn("promptTokens: {}", promptTokens);
                 promptLength = encoded.length;
                 long start = System.currentTimeMillis();
                 AbstractTensor last = batchForward(promptTokens, startPos, kvmem);
@@ -253,7 +251,7 @@ public abstract class AbstractModel implements Generator {
                 if (tokenizer.getModel().isSpecialToken(next)) {
                     responseTextWithSpecialTokens.append(cleaned);
                 } else {
-                    onTokenWithTimings.accept(cleaned, batchMsPerToken);
+                    onTokenWithTimings.emit(next, decoded, cleaned, batchMsPerToken);
                     responseText.append(cleaned);
                     responseTextWithSpecialTokens.append(cleaned);
                 }
@@ -262,9 +260,6 @@ public abstract class AbstractModel implements Generator {
                     AbstractTensor output = forward(next, i, kvmem);
                     tokensGenerated++;
                     next = sample(output, temperature, random.nextFloat(), logits);
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("Sampled token {} with temperature {}", next, temperature);
-                    }
                     output.close();
                     kvmem.incrementContextPosition();
                     if (config.eosTokens.contains(next)) {
@@ -272,16 +267,14 @@ public abstract class AbstractModel implements Generator {
                         break;
                     }
                     String decoded1 = tokenizer.decode(next);
-                    CausualWhisperer.LOGGER.debug("decoded for response {}", decoded1);
-
-                    String cleaned2 = tokenRenderer.tokenizerToRendered(decoded1);
+                    String cleaned1 = tokenRenderer.tokenizerToRendered(decoded1);
                     if (tokenizer.getModel().isSpecialToken(next)) {
-                        responseTextWithSpecialTokens.append(cleaned2);
+                        responseTextWithSpecialTokens.append(cleaned1);
                     } else {
                         genMsPerToken = (System.currentTimeMillis() - start) / (float) (tokensGenerated);
-                        onTokenWithTimings.accept(cleaned2, genMsPerToken);
-                        responseTextWithSpecialTokens.append(cleaned2);
-                        responseText.append(cleaned2);
+                        onTokenWithTimings.emit(next, decoded1, cleaned1, genMsPerToken);
+                        responseTextWithSpecialTokens.append(cleaned1);
+                        responseText.append(cleaned1);
                     }
 
                     if (generatorParameters.stopWords.isPresent()){

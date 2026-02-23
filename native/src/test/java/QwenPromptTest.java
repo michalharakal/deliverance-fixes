@@ -4,6 +4,7 @@ import io.teknek.deliverance.DType;
 import io.teknek.deliverance.generator.GeneratorParameters;
 import io.teknek.deliverance.generator.Response;
 import io.teknek.deliverance.model.AbstractModel;
+import io.teknek.deliverance.model.DoNothingGenerateEvent;
 import io.teknek.deliverance.model.ModelSupport;
 import io.teknek.deliverance.model.qwen2.Qwen2ModelType;
 import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
@@ -48,7 +49,8 @@ public class QwenPromptTest {
                     "<|im_start|>assistant\n",g.build().getPrompt());
             var uuid = UUID.randomUUID();
 
-            Response k = m.generate(uuid, g.build(), new GeneratorParameters().withTemperature(0.0f),(s1, f1) -> {});
+            Response k = m.generate(uuid, g.build(), new GeneratorParameters().withTemperature(0.0f),
+                    new DoNothingGenerateEvent());
             assertTrue(k.responseText.contains("New York City"));
 
         }

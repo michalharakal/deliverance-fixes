@@ -5,6 +5,7 @@ import io.teknek.deliverance.DType;
 import io.teknek.deliverance.generator.GeneratorParameters;
 import io.teknek.deliverance.generator.Response;
 import io.teknek.deliverance.model.AbstractModel;
+import io.teknek.deliverance.model.DoNothingGenerateEvent;
 import io.teknek.deliverance.model.ModelSupport;
 import io.teknek.deliverance.model.qwen2.Qwen2ModelType;
 import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
@@ -16,7 +17,6 @@ import io.teknek.deliverance.tensor.KvBufferCacheSettings;
 import io.teknek.deliverance.tensor.TensorCache;
 import io.teknek.deliverance.tensor.operations.ConfigurableTensorProvider;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,7 +65,8 @@ public class QwenTest {
                         """;
                 assertEquals(expected, ctx.getPrompt());// it does not change the prompt to have tools
 
-                Response r = m.generate(UUID.randomUUID(), ctx, new GeneratorParameters().withSeed(42),(s1, f1) -> {});
+                Response r = m.generate(UUID.randomUUID(), ctx, new GeneratorParameters().withSeed(42)
+                        , new DoNothingGenerateEvent());
                 System.out.println(r);
                 assertTrue(mr.meter("tensorcache.dirtyget").getCount() > 100);
                 mr.getMeters().entrySet().stream().forEach(x -> System.out.println(x.getKey() +" " +x.getValue().getCount()));

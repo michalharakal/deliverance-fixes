@@ -2,6 +2,7 @@ package io.teknek.deliverance.safetensors.prompt;
 
 import com.codahale.metrics.MetricRegistry;
 import io.teknek.deliverance.DType;
+import io.teknek.deliverance.model.DoNothingGenerateEvent;
 import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
 import io.teknek.deliverance.generator.GeneratorParameters;
 import io.teknek.deliverance.generator.Response;
@@ -60,7 +61,8 @@ public class DirectPromptTest {
                         """;
                 assertEquals(expected, ctx.getPrompt());// it does not change the prompt to have tools
 
-                Response r = m.generate(UUID.randomUUID(), ctx, new GeneratorParameters().withSeed(42),(s1, f1) -> {});
+                Response r = m.generate(UUID.randomUUID(), ctx, new GeneratorParameters().withSeed(42),
+                        new DoNothingGenerateEvent());
                 System.out.println(r);
                 assertTrue(mr.meter("tensorcache.dirtyget").getCount() > 100);
                 mr.getMeters().entrySet().stream().forEach(x -> System.out.println(x.getKey() +" " +x.getValue().getCount()));

@@ -1,5 +1,6 @@
 package io.teknek.deliverance.generator;
 
+import io.teknek.deliverance.model.GenerateEvent;
 import io.teknek.deliverance.safetensors.prompt.PromptContext;
 
 import java.io.Closeable;
@@ -18,6 +19,6 @@ public interface Generator extends Closeable {
      * @return the response
      */
     Response generate(UUID session, PromptContext promptContext, GeneratorParameters generatorParameters,
-            BiConsumer<String, Float> onTokenWithTimings
+            GenerateEvent onTokenWithTimings
     );
 }

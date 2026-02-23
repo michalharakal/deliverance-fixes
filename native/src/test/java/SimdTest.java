@@ -1,4 +1,5 @@
 import com.codahale.metrics.MetricRegistry;
+import io.teknek.deliverance.model.DoNothingGenerateEvent;
 import io.teknek.deliverance.tensor.operations.NativeSimdTensorOperations;
 import io.teknek.deliverance.DType;
 import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
@@ -79,7 +80,8 @@ public class SimdTest {
                         <|assistant|>
                         """;
                 assertEquals(expected, ctx.getPrompt());
-                Response r = m.generate(UUID.randomUUID(), ctx, new GeneratorParameters().withSeed(43), (s1, f1) -> {});
+                Response r = m.generate(UUID.randomUUID(), ctx, new GeneratorParameters().withSeed(43),
+                        new DoNothingGenerateEvent());
                 System.out.println(r.responseText);
             }
         }

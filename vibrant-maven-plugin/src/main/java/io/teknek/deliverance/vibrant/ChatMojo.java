@@ -61,7 +61,7 @@ public class ChatMojo extends AbstractMojo {
                             .withIncludeStopStrInOutput(false)
                             .withStopWords(List.of("<|eot_id|>"))
                             .withTemperature(0.2f)
-                            .withSeed(99998), (s1, f1) -> {
+                            .withSeed(99998), (int next, String tok, String s1, float f1) -> {
                         System.out.print( model.getTokenRenderer().tokenizerToRendered(s1));
                     });
                     System.out.println();

@@ -38,42 +38,34 @@ public class ModelSupportTest {
             assertEquals(LlamaTokenizer.class, abstractModel.tokenizer.getClass());
             {
                 UUID u = UUID.randomUUID();
-                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43).withNtokens(50), (s, f1) -> {
-                });
+                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43)
+                        .withNtokens(50), new DoNothingGenerateEvent());
                 assertEquals("4,5,6,7,8,9,10,11,12,", r.responseText);
                 ConcurrentMap<String, KvBufferCache.KvBuffer> d = abstractModel.kvBufferCache.getCacheByKey();
                 assertEquals(d.size(), 1);
                 Map.Entry<String, KvBufferCache.KvBuffer> entry = d.entrySet().iterator().next();
-                assertEquals(entry.getKey(), "sha1obetter");
-            }
-            {
-                UUID u = UUID.randomUUID();
-                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43).withNtokens(50), (s, f1) -> {
-                });
-                assertEquals("4", r.responseText);
-                ConcurrentMap<String, KvBufferCache.KvBuffer> d = abstractModel.kvBufferCache.getCacheByKey();
-                assertEquals(d.size(), 1);
-                Map.Entry<String, KvBufferCache.KvBuffer> entry = d.entrySet().iterator().next();
-                assertEquals(entry.getKey(), "sha1obetter");
-            }
-            {
-                UUID u = UUID.randomUUID();
-                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43).withNtokens(50), (s, f1) -> {
-                });
-                assertEquals("4", r.responseText);
-                ConcurrentMap<String, KvBufferCache.KvBuffer> d = abstractModel.kvBufferCache.getCacheByKey();
-                assertEquals(d.size(), 1);
-                Map.Entry<String, KvBufferCache.KvBuffer> entry = d.entrySet().iterator().next();
-                assertEquals(entry.getKey(), "sha1obetter");
+                assertEquals(entry.getKey(), u.toString());
             }
 
             {
                 UUID u = UUID.randomUUID();
-                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43).withNtokens(50).withSalt("yo"), (s, f1) -> {
+                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43)
+                        .withNtokens(50), new DoNothingGenerateEvent());
+                assertEquals("4,5,6,7,8,9,10,11,12,", r.responseText);
+                ConcurrentMap<String, KvBufferCache.KvBuffer> d = abstractModel.kvBufferCache.getCacheByKey();
+                assertEquals(2, d.size());
+                Map.Entry<String, KvBufferCache.KvBuffer> entry = d.entrySet().iterator().next();
+                //assertEquals(u.toString(), entry.getKey());
+            }
+
+            {
+                UUID u = UUID.randomUUID();
+                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43).withNtokens(50),
+                        (int next, String tok, String s, float f1) -> {
                 });
                 assertEquals("4,5,6,7,8,9,10,11,12,", r.responseText);
                 ConcurrentMap<String, KvBufferCache.KvBuffer> d = abstractModel.kvBufferCache.getCacheByKey();
-                assertEquals(d.size(), 2);
+                assertEquals(3, d.size());
                 Map.Entry<String, KvBufferCache.KvBuffer> entry = d.entrySet().iterator().next();
             }
         }
@@ -95,13 +87,13 @@ public class ModelSupportTest {
 
             {
                 UUID u = UUID.randomUUID();
-                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43).withNtokens(50), (s, f1) -> {
-                });
+                Response r = abstractModel.generate(u, ctx, new GeneratorParameters().withSeed(43)
+                        .withNtokens(50), new DoNothingGenerateEvent());
                 assertEquals("4,5,6,7,8,9,10,11,12,", r.responseText);
                 ConcurrentMap<String, KvBufferCache.KvBuffer> d = abstractModel.kvBufferCache.getCacheByKey();
                 assertEquals(d.size(), 1);
                 Map.Entry<String, KvBufferCache.KvBuffer> entry = d.entrySet().iterator().next();
-                assertEquals(entry.getKey(), "sha1obetter");
+                assertEquals(entry.getKey(), u.toString());
             }
 
         }

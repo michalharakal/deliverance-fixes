@@ -3,6 +3,7 @@ import io.teknek.deliverance.DType;
 import io.teknek.deliverance.generator.GeneratorParameters;
 import io.teknek.deliverance.generator.Response;
 import io.teknek.deliverance.model.AbstractModel;
+import io.teknek.deliverance.model.DoNothingGenerateEvent;
 import io.teknek.deliverance.model.ModelSupport;
 import io.teknek.deliverance.safetensors.fetch.ModelFetcher;
 import io.teknek.deliverance.safetensors.prompt.PromptContext;
@@ -38,7 +39,8 @@ public class RandomNumberTest {
             PromptContext ctx = PromptContext.of(prompt);
             var uuid = UUID.randomUUID();
 
-            Response k = m.generate(uuid, ctx, new GeneratorParameters().withTemperature(0.0f).withSeed(99999),(s1, f1) -> {});
+            Response k = m.generate(uuid, ctx, new GeneratorParameters().withTemperature(0.0f).withSeed(99999),
+                    new DoNothingGenerateEvent());
             System.out.println(k);
             assertEquals("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", k.responseText);
         }
@@ -74,7 +76,7 @@ public class RandomNumberTest {
                     .withNtokens(512)
                             .withIncludeStopStrInOutput(false)
                     .withStopWords(List.of("<|eot_id|>"))
-                    .withTemperature(0.2f).withSeed(99998),(s1, f1) -> { });
+                    .withTemperature(0.2f).withSeed(99998), new DoNothingGenerateEvent());
 
             assertEquals("""
 Here is the Java code that meets the specifications:

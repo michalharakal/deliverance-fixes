@@ -83,7 +83,7 @@ public class DeliveranceController {
         if (request.getStream() != null && request.getStream()) {
             SseEmitter emitter = new SseEmitter(-1L);
             CompletableFuture<Response> generate = CompletableFuture.supplyAsync( () -> {
-                return model.generate(sessionId, builder.build(), params, (String token, Float f) -> {
+                return model.generate(sessionId, builder.build(), params, (int next, String tok, String token, float f) -> {
                             try {
                                 emitter.send( messageDelta(sessionId, token, index));
                             } catch (IOException  | RuntimeException e) {
@@ -108,7 +108,7 @@ public class DeliveranceController {
             });
             return emitter;
         } else {
-            Response resp = model.generate(UUID.randomUUID(), builder.build(), params, (s, aFloat) -> {});
+            Response resp = model.generate(UUID.randomUUID(), builder.build(), params, (int next, String rok, String s, float aFloat) -> {});
             CreateChatCompletionResponse out = new CreateChatCompletionResponse().id(sessionId.toString())
                     .choices(
                             List.of(
