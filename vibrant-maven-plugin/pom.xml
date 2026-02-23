@@ -16,20 +16,37 @@
         <maven.plugin.api.version>3.9.12</maven.plugin.api.version>
         <maven-project.version>2.2.1</maven-project.version>
         <maven-plugin-annotation.verion>3.15.2</maven-plugin-annotation.verion>
+        <langchain4j.version>1.11.0</langchain4j.version>
     </properties>
 
     <dependencyManagement>
     </dependencyManagement>
 
-
     <dependencies>
 
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-embeddings-all-minilm-l6-v2</artifactId>
+            <version>${langchain4j.version}-beta19</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-document-parser-apache-tika</artifactId>
+            <version>${langchain4j.version}-beta19</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j</artifactId>
+            <version>${langchain4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
             <version>${maven.plugin.api.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>

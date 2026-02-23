@@ -48,11 +48,9 @@ public class ChatMojo extends AbstractMojo {
         try (AbstractModel model = ModelSupport.loadModel(f, working, quantized, new ConfigurableTensorProvider(operation),
                 new MetricRegistry(), tensorCache, new KvBufferCacheSettings(true), fetch)) {
             System.out.println("Chat with deliverance! Type 'undeliver' to quit.");
-            System.out.print(">> ");    
-
+            System.out.print(">> ");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             try {
-
                 String inputLine;
                 while (!(inputLine = br.readLine()).equalsIgnoreCase("undeliver")) {
                     PromptSupport.Builder b = model.promptSupport().get().builder();
@@ -68,10 +66,7 @@ public class ChatMojo extends AbstractMojo {
                     });
                     System.out.println();
                     System.out.print(">> ");
-                    //System.out.println("deliverance>> " + k.responseText);
-
                 }
-
             } catch (IOException e) {
                 throw new MojoExecutionException(e);
             }
