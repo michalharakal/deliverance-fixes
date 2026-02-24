@@ -17,6 +17,7 @@ public class RmsNorm extends LayerNorm {
 
     public RmsNorm(AbstractModel m, AbstractTensor weights, float weightAdjustment, MetricRegistry metricRegistry) {
         super(m, null, weights, metricRegistry);
+        totalTime = metricReigstry.histogram("rms_norm");
         this.weightAdjustment = weightAdjustment;
     }
 

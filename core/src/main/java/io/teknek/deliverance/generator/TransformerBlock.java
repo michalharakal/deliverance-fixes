@@ -60,7 +60,7 @@ public class TransformerBlock {
         );
     }
 
-    /*
+/*
     public TransformerBlock(
             AbstractModel model,
             int layerIndex,
@@ -81,11 +81,11 @@ public class TransformerBlock {
                 Optional.empty(),
                 Optional.of(postFFNorm)
         );
-    }
-    */
+    }*/
 
 
-    /*
+
+
     public TransformerBlock(
             AbstractModel model,
             int layerIndex,
@@ -94,7 +94,8 @@ public class TransformerBlock {
             LayerNorm postAttentionNorm,
             LayerNorm preFFNorm,
             FeedForward ffBlock,
-            LayerNorm postFFNorm
+            LayerNorm postFFNorm,
+            ConfigurableTensorProvider configurableTensorProvider
     ) {
         this(
                 model,
@@ -105,10 +106,11 @@ public class TransformerBlock {
                 Optional.of(preFFNorm),
                 ffBlock,
                 Optional.of(postFFNorm),
-                Optional.empty()
+                Optional.empty(),
+                configurableTensorProvider
         );
     }
-*/
+
     public TransformerBlock(
             AbstractModel model,
             int layerIndex,
