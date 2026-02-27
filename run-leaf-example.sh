@@ -3,9 +3,16 @@
 
 # Set JAVA_HOME if not already set
 if [ -z "$JAVA_HOME" ]; then
-    if [ -d "/home/tlind/jdk-24.0.2+12" ]; then
-        export JAVA_HOME=/home/tlind/jdk-24.0.2+12
-        export PATH=$JAVA_HOME/bin:$PATH
+    if [ -x /usr/libexec/java_home ]; then
+        # macOS
+        export JAVA_HOME="$(/usr/libexec/java_home)"
+    elif command -v java &> /dev/null; then
+        # Linux / other: resolve from java on PATH
+        export JAVA_HOME="$(java -XshowSettings:property -version 2>&1 | grep 'java.home' | awk '{print $3}')"
+    fi
+    if [ -z "$JAVA_HOME" ]; then
+        echo "ERROR: JAVA_HOME is not set and could not be detected. Install Java or set JAVA_HOME."
+        exit 1
     fi
 fi
 
