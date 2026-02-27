@@ -18,10 +18,11 @@ fi
 
 cd "$(dirname "$0")" || exit 1
 
-# Build core and dependencies if needed
-if [ ! -f "core/target/core-0.0.2-SNAPSHOT.jar" ]; then
+# Build and install core and its sibling dependencies if needed
+CORE_JAR_EXISTS=$(ls core/target/core-*.jar 2>/dev/null | grep -v sources | grep -v javadoc | head -1)
+if [ -z "$CORE_JAR_EXISTS" ]; then
     echo "Building core and dependencies..."
-    mvn clean package -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -pl core -am || exit 1
+    mvn clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dgpg.skip=true -pl core -am || exit 1
 fi
 
 cd core || exit 1
